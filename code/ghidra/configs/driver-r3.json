@@ -1,0 +1,11 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/decompile-driver-r3",
+  "maxFunctions": 30,
+  "includeCallers": false,
+  "addresses": ["1400f0d90", "14015d0c0", "140140e90", "14013fb10", "14013fd60", "14001ecc0", "140032ca0", "1400275b0"],
+  "stringContains": ["actionFrameHandlerInit", "prvActionFrameHandleFrameInDaf", "prvActionFrameHandleFrameInDp", "prvActionFrameSendNewDafRequest"],
+  "dataProbes": [
+    {"address": "1403ebf28", "qwords": 10, "followFunctions": true},
+    {"address": "1403ef330", "qwords": 12, "followFunctions": true}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/decompile-driver-r2",
+  "maxFunctions": 54,
+  "includeCallers": false,
+  "addresses": ["1400f6590", "14011aad0", "1400f0640", "140033220", "1400f6a30", "140014cb0", "1400f6380"],
+  "stringContains": ["CCmdTaskSendRequestActionFrame", "CCmdTaskSendResponseActionFrame", "prvActionFrameApiDecider", "prvActionFrameAddMacHeaderToFrame", "CWdiCommonClientIndicationsObserver::handleActionFrameReceived"],
+  "dataProbes": [
+    {"address": "1403ef168", "qwords": 20, "followFunctions": true},
+    {"address": "1403e9ac0", "qwords": 12, "followFunctions": true},
+    {"address": "1403ebed0", "qwords": 12, "followFunctions": true},
+    {"address": "1405ae000", "qwords": 20, "followFunctions": false},
+    {"address": "14053b6f8", "qwords": 16, "followFunctions": true}
+  ]
+}

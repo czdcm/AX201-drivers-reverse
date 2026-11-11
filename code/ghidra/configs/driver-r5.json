@@ -1,0 +1,12 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/decompile-driver-r5",
+  "maxFunctions": 34,
+  "includeCallers": false,
+  "addresses": ["1402d0ad0", "1400448b0", "140045250", "140044460", "14007f410", "14007f550", "1400445f0"],
+  "stringContains": ["handleActionFrameReceived", "IndicationActionFrame", "oscDpRxAddPacketToIndication"],
+  "dataProbes": [
+    {"address": "1403e7f20", "qwords": 10, "followFunctions": true},
+    {"address": "1403e7d90", "qwords": 10, "followFunctions": true},
+    {"address": "1403f03e0", "qwords": 10, "followFunctions": true}
+  ]
+}

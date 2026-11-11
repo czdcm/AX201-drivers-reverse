@@ -1,0 +1,12 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/decompile-ihv-r3",
+  "maxFunctions": 25,
+  "includeCallers": false,
+  "addresses": ["18003e740", "180028b10"],
+  "stringContains": ["RemoteSessionOpen", "IsIntelOnlyApplication", "ClientValidator::IsClientElevated"],
+  "dataProbes": [
+    {"address": "180144a78", "qwords": 7, "followFunctions": true},
+    {"address": "18014cce8", "qwords": 5, "followFunctions": true},
+    {"address": "180148048", "qwords": 5, "followFunctions": true}
+  ]
+}

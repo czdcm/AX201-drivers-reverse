@@ -1,0 +1,8 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/decompile-driver-r4",
+  "maxFunctions": 8,
+  "includeCallers": false,
+  "addresses": ["1400432a0", "140027130", "140142810", "1402cc2e0", "140141880"],
+  "stringContains": [],
+  "dataProbes": []
+}

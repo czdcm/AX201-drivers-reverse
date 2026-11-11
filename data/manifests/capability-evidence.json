@@ -1,0 +1,50 @@
+﻿{
+    "State":  "PAUSED_BY_USER_FOR_MODEL_SWITCH",
+    "NewRuns":  [
+                    {
+                        "Run":  "capability-r1",
+                        "Count":  11,
+                        "Completed":  11,
+                        "EvidenceSHA256":  "3F553A8AD7EFAC5ACDC76D1A3165DAE497DDEA7A2BDA4DBD4ECAD49D29B843DA",
+                        "Addresses":  [
+                                          "140142a80",
+                                          "14003a790",
+                                          "14003bca0",
+                                          "1400f6110",
+                                          "14000aab0",
+                                          "1400456e0",
+                                          "140044bb0",
+                                          "140049690",
+                                          "14005dd70",
+                                          "1401f30f0",
+                                          "14038c7f0"
+                                      ]
+                    },
+                    {
+                        "Run":  "capability-r2",
+                        "Count":  13,
+                        "Completed":  13,
+                        "EvidenceSHA256":  "3AFF2B07FE0E6132885BE01E733170ADB7ECF58E8A7400E44697F8B1B89FF629",
+                        "Addresses":  [
+                                          "140171560",
+                                          "1400084b0",
+                                          "1400083f0",
+                                          "14007b600",
+                                          "14007b780",
+                                          "14005e580",
+                                          "1400455b0",
+                                          "140044e50",
+                                          "140044eb0",
+                                          "140035660",
+                                          "14005e6d0",
+                                          "14005f020",
+                                          "1402d70f0"
+                                      ]
+                    }
+                ],
+    "NewRecords":  24,
+    "TotalRecords":  196,
+    "TotalUniqueFunctions":  157,
+    "Scope":  "Offline read-only exports; not a claim of complete manual review",
+    "PreviousManifest":  "TARGETED-EVIDENCE-MANIFEST.json"
+}

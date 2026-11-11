@@ -1,0 +1,9 @@
+﻿{
+    "DeviceName":  "Intel(R) Wi-Fi 6 AX201 160MHz",
+    "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A70\u0026SUBSYS_00748086\u0026REV_11\\3\u002611583659\u00260\u0026A3",
+    "DriverVersion":  "24.50.0.4",
+    "DriverDate":  "\/Date(1779235200000)\/",
+    "DriverProviderName":  "Intel",
+    "InfName":  "oem73.inf",
+    "IsSigned":  true
+}

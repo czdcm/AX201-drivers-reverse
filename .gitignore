@@ -1,0 +1,24 @@
+﻿# 绝不提交厂商二进制
+*.sys
+*.dll
+*.dat
+*.cat
+*.exe
+*.msi
+
+# 反编译产物与字符串转储（仅本地保留）
+evidence/
+*.strings.txt
+*.asm.txt
+*.die.json
+*.detection.json
+
+# 工具与缓存
+ghidra-project/
+ghidra-cache/
+ghidra-settings/
+ghidra-temp/
+
+# OS
+Thumbs.db
+desktop.ini

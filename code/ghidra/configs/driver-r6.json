@@ -1,0 +1,13 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/decompile-driver-r6",
+  "maxFunctions": 16,
+  "includeCallers": false,
+  "addresses": ["1402d67d0"],
+  "stringContains": ["hmfmEvRxMgmtFrame", "prvhmfmBuildReceivedCnctFrame", "prvHmfmHandleActionFrame"],
+  "dataProbes": [
+    {"address": "1403e7f20", "qwords": 1, "followFunctions": true},
+    {"address": "1403e7d90", "qwords": 1, "followFunctions": true},
+    {"address": "1403f03e0", "qwords": 1, "followFunctions": true},
+    {"address": "1403e2080", "qwords": 1, "followFunctions": true}
+  ]
+}

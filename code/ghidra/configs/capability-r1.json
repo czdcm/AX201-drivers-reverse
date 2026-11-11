@@ -1,0 +1,8 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/capability-r1",
+  "maxFunctions": 36,
+  "includeCallers": false,
+  "addresses": ["140142a80", "14003a790", "14003bca0", "1400f6110"],
+  "stringContains": ["oscDpRxAddPacketToIndicationApi", "rxPacketProcessValidMpduFrameApi", "prvRxCreateOsMgmtPacket", "prvRxSecurityApplySecurityFilterForMgmtFrames", "prvmSecurityDataRxDataVerifyDecryption", "prvTxFillPacketInfoWithOsPacketMetaData", "prvTxFillPacketInfoWithInternalOsPacketMetaData", "prvhHtCheckActionFrameIsValid", "prvhTGhCheckActionFrameIsValid"],
+  "dataProbes": []
+}

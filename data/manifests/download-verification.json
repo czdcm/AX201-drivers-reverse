@@ -1,0 +1,9 @@
+﻿{
+    "File":  "WiFi-24.50.0-Driver64-Win10-Win11.exe",
+    "Bytes":  47333432,
+    "SHA256":  "17EFCFEDB6075FDDB731022D67263888A9AFF04C9134CC0F1A198F8751CE1761",
+    "SignatureStatus":  "Valid",
+    "Signer":  "CN=Intel Corporation, O=Intel Corporation, S=California, C=US, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=California, OID.1.3.6.1.4.1.311.60.2.1.3=US, SERIALNUMBER=1636032",
+    "Source":  "https://downloadmirror.intel.com/922739/WiFi-24.50.0-Driver64-Win10-Win11.exe",
+    "Executed":  false
+}

@@ -1,0 +1,7 @@
+{
+  "output": "C:/Users/诚挚的村民/Desktop/DSH/IT/sessions/2026-11-11-wifi-driver/analysis/decompile-ihv-r1",
+  "maxFunctions": 42,
+  "includeCallers": true,
+  "addresses": ["180056c40", "180057720", "18005a5f0"],
+  "stringContains": ["RouterUtils::OidSender::SendOid", "IntelIhvRpcEndpoint", "routerDllProsetDot11ExtNicSpecificExtension", "RouterUtils::OsSystem::IsElevated", "WinVerifyTrustSignature", "RpcServerRegisterAuthInfo", "RpcServerRegisterIf", "WlanIhvControl"]
+}

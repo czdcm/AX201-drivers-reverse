@@ -1,0 +1,26 @@
+﻿[
+    {
+        "Path":  "C:\\Users\\诚挚的村民\\Desktop\\small_toolkit\\Strings\\strings64.exe",
+        "Bytes":  478088,
+        "FileVersion":  "2.54",
+        "SHA256":  "05DBB43499BCFF44424C7AC2D987EA9E9742CD90AFE360E84BA0BCCADE17F71B",
+        "SignatureStatus":  "Valid",
+        "Signer":  "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+    },
+    {
+        "Path":  "C:\\Users\\诚挚的村民\\Desktop\\small_toolkit\\die_win64_4.0.0\\diec.exe",
+        "Bytes":  8085504,
+        "FileVersion":  "4.0.0.0",
+        "SHA256":  "60E2383D89A9880A520C753B027E8178154077AF1883384C3A819C0A89DED8EB",
+        "SignatureStatus":  "NotSigned",
+        "Signer":  null
+    },
+    {
+        "Path":  "C:\\Program Files\\Microsoft\\jdk-25.0.3.9-hotspot\\bin\\java.exe",
+        "Bytes":  50208,
+        "FileVersion":  "25.0.3.0",
+        "SHA256":  "B78CEBD95D0B3337DFECC99C7D32D9187E09A9BBF57E6B3B127BF43FBAA22F0C",
+        "SignatureStatus":  "Valid",
+        "Signer":  "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+    }
+]
