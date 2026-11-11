@@ -1,6 +1,6 @@
-﻿[
+[
     {
-        "Path":  "C:\\Users\\诚挚的村民\\Desktop\\small_toolkit\\Strings\\strings64.exe",
+        "Path":  "C:\\Users\\user\\Desktop\\small_toolkit\\Strings\\strings64.exe",
         "Bytes":  478088,
         "FileVersion":  "2.54",
         "SHA256":  "05DBB43499BCFF44424C7AC2D987EA9E9742CD90AFE360E84BA0BCCADE17F71B",
@@ -8,7 +8,7 @@
         "Signer":  "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
     },
     {
-        "Path":  "C:\\Users\\诚挚的村民\\Desktop\\small_toolkit\\die_win64_4.0.0\\diec.exe",
+        "Path":  "C:\\Users\\user\\Desktop\\small_toolkit\\die_win64_4.0.0\\diec.exe",
         "Bytes":  8085504,
         "FileVersion":  "4.0.0.0",
         "SHA256":  "60E2383D89A9880A520C753B027E8178154077AF1883384C3A819C0A89DED8EB",

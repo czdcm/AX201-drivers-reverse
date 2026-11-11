@@ -13,7 +13,7 @@
 | 0x44 | u32 | 保留（全 0） |
 | 0x48 | u64 | **处理函数指针** |
 
-完整列表见 [oid-table.txt](./oid-table.txt)（制表符分隔：名称 / OID / 处理函数）。
+完整列表见 oid-table.txt（制表符分隔：名称 / OID / 处理函数）。
 
 验证方式：表中 `OID_802_11_BSSID_LIST_SCAN` 对应 `0xFF800000`，与 Windows 标准 OID 定义一致，说明偏移解释正确。
 
