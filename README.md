@@ -1,42 +1,50 @@
-﻿# AX201 椹卞姩閫嗗悜璁板綍
+# AX201 驱动逆向记录
 
-Intel Wi-Fi 6 AX201锛圕NVio2锛夊湪 Windows 涓婄殑椹卞姩闈欐€侀€嗗悜涓庡彲琛屾€ч獙璇併€?
-鏈粨搴撳彧鍖呭惈**鍒嗘瀽缁撴灉銆佷簨瀹炴暟鎹€佽剼鏈?*锛屼笉鍖呭惈浠讳綍 Intel 浜岃繘鍒舵枃浠讹紝涔熶笉鍖呭惈澶ц妯″弽缂栬瘧浜х墿銆?
+Intel Wi-Fi 6 AX201（CNVio2）在 Windows 上的驱动静态逆向与可行性验证。
+
+本仓库只包含**分析结果、事实数据、脚本**，不包含任何 Intel 二进制文件，也不包含大规模反编译产物。
+
 ---
 
-## 缁撹
+## 结论
 
-**鍦ㄣ€屼娇鐢ㄩ樁娈典繚鎸?Secure Boot 寮€鍚€佷笉鏂板纭欢銆嶇殑鍓嶆彁涓嬶紝鐩爣鏃犳硶杈炬垚銆?*
+**在「使用阶段保持 Secure Boot 开启、不新增硬件」的前提下，目标无法达成。**
 
-涓ら亾涓嶅彲缁曡繃鐨勯檺鍒跺彔鍔狅細
+两道不可绕过的限制叠加：
 
-1. 鏈幏寰蒋绛惧悕鐨勫唴鏍哥粍浠舵棤娉曞湪 Secure Boot 寮€鍚姸鎬佷笅鍔犺浇锛?2. 淇敼杩囩殑 `Netwtw14.sys` 姘歌繙鏃犳硶鑾峰緱绛惧悕锛屼篃涓嶈兘鍚堟硶鍒嗗彂銆?
-鎶€鏈矾寰勬湰韬槸閫氱殑锛堣 [`docs/05-wdi-ihv-transport.md`](docs/05-wdi-ihv-transport.md)锛夛紝浣嗚惤鍦伴渶瑕?EV 浠ｇ爜绛惧悕璇佷功 + 寰蒋 attestation 绛惧悕锛屽睘浜庨噰璐笌瀹℃牳娴佺▼銆?
+1. 未获微软签名的内核组件无法在 Secure Boot 开启状态下加载；
+2. 修改过的 `Netwtw14.sys` 永远无法获得签名，也不能合法分发。
+
+技术路径本身是通的（见 [`docs/05-wdi-ihv-transport.md`](docs/05-wdi-ihv-transport.md)），但落地需要 EV 代码签名证书 + 微软 attestation 签名，属于采购与审核流程。
+
 ---
 
-## 鐩爣涓庣害鏉?
-| 椤?| 鍐呭 |
+## 目标与约束
+
+| 项 | 内容 |
 |---|---|
-| 鐩爣 | 鍦ㄦ湰鏈?AX201 涓婂疄鐜?AirDrop 鎺ユ敹 |
-| 纭欢绾︽潫 | 涓嶆柊澧炰换浣曠‖浠?|
-| 瀹夊叏绾︽潫 | 浣跨敤闃舵 Secure Boot 淇濇寔寮€鍚紙瀹夎鏃朵复鏃跺叧闂彲鎺ュ彈锛?|
-| 宸茬‘璁ゅ墠鎻?| 鎺ユ敹绔笉闇€瑕?Apple 绛惧彂鐨勮韩浠借瘉涔?|
+| 目标 | 在本机 AX201 上实现 AirDrop 接收 |
+| 硬件约束 | 不新增任何硬件 |
+| 安全约束 | 使用阶段 Secure Boot 保持开启（安装时临时关闭可接受） |
+| 已确认前提 | 接收端不需要 Apple 签发的身份证书 |
 
 ---
 
-## 鐜涓庢牱鏈?
-| 椤?| 鍊?|
-|---|---|
-| 涓绘満 | ASUS TUF Gaming F16 FX607JIR |
-| 绯荤粺 | Windows 11 Pro x64 `10.0.26300` |
-| 缃戝崱 | Intel Wi-Fi 6 AX201 160MHz |
-| 纭欢 ID | `PCI\VEN_8086&DEV_7A70&SUBSYS_00748086&REV_11` |
-| 鎬荤嚎 | CNVio2锛?*涓嶆槸** USB锛學inUSB/libusb 璺嚎涓嶅彲鐢級 |
-| 椹卞姩鐗堟湰 | `24.50.0.4`锛宍oem73.inf` |
-| 椹卞姩鍖?| `netwtw08.inf_amd64_7d404936069a9b78` |
+## 环境与样本
 
-鏍锋湰 SHA256锛?
-| 鏂囦欢 | SHA256 |
+| 项 | 值 |
+|---|---|
+| 主机 | ASUS TUF Gaming F16 FX607JIR |
+| 系统 | Windows 11 Pro x64 `10.0.26300` |
+| 网卡 | Intel Wi-Fi 6 AX201 160MHz |
+| 硬件 ID | `PCI\VEN_8086&DEV_7A70&SUBSYS_00748086&REV_11` |
+| 总线 | CNVio2（**不是** USB，WinUSB/libusb 路线不可用） |
+| 驱动版本 | `24.50.0.4`，`oem73.inf` |
+| 驱动包 | `netwtw08.inf_amd64_7d404936069a9b78` |
+
+样本 SHA256：
+
+| 文件 | SHA256 |
 |---|---|
 | `Netwtw14.sys` | `87C083010DAD3FB6AC8CAC99DDB5E274DF300DA789CC8774B4A25DA137DA38B8` |
 | `IntelIHVRouter14.dll` | `60B7F7BC371E711FDA6BD957A252F779B4D326F9637BFD4751D27D88826B9ACF` |
@@ -44,108 +52,147 @@ Intel Wi-Fi 6 AX201锛圕NVio2锛夊湪 Windows 涓婄殑椹卞姩闈欐€侀�
 
 ---
 
-## 鐩綍缁撴瀯
+## 目录结构
 
 ```
-docs/                          鍒嗘瀽鎶ュ憡
-  01-overview.md               鏈€鍒濊皟鏌ワ細纭欢銆侀┍鍔ㄥ寘銆佹ā鍧楁瀯鎴?  02-static-analysis.md        绗竴杞潤鎬佸熀绾?  03-ihv-request-and-action-frame.md  IHV 璇锋眰灏佸涓?Action Frame 鏋勯€?  04-oid-dispatch-table.md     OID 鍒嗘淳琛ㄨ繕鍘燂紙146 鏉★級
-  05-wdi-ihv-transport.md      WDI IHV 璇锋眰鐨勭湡瀹炰紶杈撴柟寮?鈽?  06-sniffer-and-etw.md        鍡呮帰甯х粡 ETW 杈撳嚭 鈽?  07-driver-sniffer-subsystem.md 椹卞姩鍐呭梾鎺㈠瓙绯荤粺涓?MAC 绫诲瀷鏋氫妇
-  08-firmware-command-layer.md 鍥轰欢鍛戒护灞傦紙MHIF锛夊嫎鏌?  09-user-mode-attempts.md     鐢ㄦ埛鎬佷笁鏉￠€氶亾鐨勫疄娴嬭褰?  10-wlanihvcontrol-investigation.md  WlanIhvControl 璺緞涓?DACL
-  11-rx-tx-boundary.md         鏀跺彂杈圭晫涓庡钩鍙板眰闄愬埗
-  12-receive-paths-retrospective.md  鎺ユ敹璺緞鍏ㄩ噺澶嶇洏
-  13-deliverable-and-signing.md 浜や粯褰㈡€併€佺鍚嶄笌绀惧尯鐗堝畨瑁呰璁?  14-conclusion.md             闃舵鎬ц瀹?  15-handoff.md                浜ゆ帴璁板綍
+docs/                                分析报告
+  01-overview.md                     最初调查：硬件、驱动包、模块构成
+  02-static-analysis.md              第一轮静态基线
+  03-ihv-request-and-action-frame.md IHV 请求封套与 Action Frame 构造
+  04-oid-dispatch-table.md           OID 分派表还原（146 条）
+  05-wdi-ihv-transport.md            WDI IHV 请求的真实传输方式 ★
+  06-sniffer-and-etw.md              嗅探帧经 ETW 输出 ★
+  07-driver-sniffer-subsystem.md     驱动内嗅探子系统与 MAC 类型枚举
+  08-firmware-command-layer.md       固件命令层（MHIF）勘查
+  09-user-mode-attempts.md           用户态三条通道的实测记录
+  10-wlanihvcontrol-investigation.md WlanIhvControl 路径与 DACL
+  11-rx-tx-boundary.md               收发边界与平台层限制
+  12-receive-paths-retrospective.md  接收路径全量复盘
+  13-deliverable-and-signing.md      交付形态、签名与社区版安装设计
+  14-conclusion.md                   阶段性裁定
+  15-handoff.md                      交接记录
   external/
-    dropbridge-radio.md        DropBridge radio 鍚庣濂戠害
-    dropbridge-awdl.md         DropBridge AWDL 涓婂眰澶嶇敤闈?
-data/                          缁撴瀯鍖栨暟鎹?  oid-table.tsv                146 鏉?OID 鍒嗘淳琛紙鍚嶇О / 鏁板€?/ 澶勭悊鍑芥暟锛?  wlan-capabilities.txt        绯荤粺鎶ュ憡鐨勭綉鍗¤兘鍔?  manifests/                   璇佹嵁娓呭崟銆侀┍鍔ㄦ竻鍗曘€佷笅杞芥牎楠?  detection/                   DIE 鏍煎紡璇嗗埆缁撴灉
+    dropbridge-radio.md              DropBridge radio 后端契约
+    dropbridge-awdl.md               DropBridge AWDL 上层复用面
 
-src/                           婧愮爜鏍圭洰褰?  tools/ghidra/
-    Ax201ReadOnlyExport.java   鍙璇佹嵁瀵煎嚭鑴氭湰
-    configs/                   鍚勮疆瀵煎嚭閰嶇疆
+data/                                结构化数据
+  oid-table.tsv                      146 条 OID 分派表（名称 / 数值 / 处理函数）
+  wlan-capabilities.txt              系统报告的网卡能力
+  manifests/                         证据清单、驱动清单、下载校验
+  detection/                         DIE 格式识别结果
+
+src/                                 源码根目录
+  tools/ghidra/
+    Ax201ReadOnlyExport.java         只读证据导出脚本
+    configs/                         各轮导出配置
   driver/oidproxy/
-    oidproxy.c                 鑷啓 NDIS 鍗忚椹卞姩锛堝彲缂栬瘧锛屾湭閮ㄧ讲锛?    build.cmd                  缂栬瘧鑴氭湰锛圫DK 26100 + WDK 22621 + MSVC锛?  probes/                      鎻愭潈鎺㈡祴鑴氭湰锛屾寜鎵ц椤哄簭缂栧彿
+    oidproxy.c                       自写 NDIS 协议驱动（可编译，未部署）
+    build.cmd                        编译脚本（SDK 26100 + WDK 22621 + MSVC）
+  probes/                            提权探测脚本，按执行顺序编号
+```
 
-private/                       璇佹嵁瀛樻。锛堝凡 gitignore锛屼笉鍙戝竷锛?  evidence/                    鍚勮疆鍙嶇紪璇戣緭鍑?  data/strings/                瀛楃涓茶浆鍌?  logs/                        Ghidra 杩愯鏃ュ織涓庡疄娴嬫棩蹇?```
+## 仓库位置约定
 
+本仓库的工作副本位于如下结构，`repo/` 才是版本库根：
+
+```
+C:\Github\AX201-drivers-reverse\
+├── repo/       ← 版本库根（本 README 所在）
+└── private/    证据存档（反编译产物、字符串转储、日志），不纳入版本库
+```
 
 ---
 
-## 鏍稿績鍙戠幇
+## 核心发现
 
-### 1. OID 鍒嗘淳琛?
-`.rdata` 涓竴寮犺捣濮嬩簬鏂囦欢鍋忕Щ `0x52FC60` 鐨勮繛缁〃锛屽叡 **146 鏉?*锛屾瘡鏉?`0x50` 瀛楄妭锛?
-| 鍋忕Щ | 瀹藉害 | 鍚箟 |
+### 1. OID 分派表
+
+`.rdata` 中一张起始于文件偏移 `0x52FC60` 的连续表，共 **146 条**，每条 `0x50` 字节：
+
+| 偏移 | 宽度 | 含义 |
 |---|---|---|
-| 0x00 | 0x40 | OID 鍚嶇О |
-| 0x40 | u32 | OID 鏁板€?|
-| 0x44 | u32 | 淇濈暀 |
-| 0x48 | u64 | 澶勭悊鍑芥暟 |
+| 0x00 | 0x40 | OID 名称 |
+| 0x40 | u32 | OID 数值 |
+| 0x44 | u32 | 保留 |
+| 0x48 | u64 | 处理函数 |
 
-浜ゅ弶楠岃瘉锛歚OID_802_11_BSSID_LIST_SCAN` 瀵瑰簲 `0xFF800000`锛屼笌 Windows 鏍囧噯瀹氫箟涓€鑷淬€?
-瀹屾暣鏁版嵁锛歔`data/oid-table.tsv`](data/oid-table.tsv)
+交叉验证：`OID_802_11_BSSID_LIST_SCAN` 对应 `0xFF800000`，与 Windows 标准定义一致。
 
-### 2. WDI IHV 璇锋眰鐨勭湡瀹炰紶杈撴柟寮?
-`dot11wdi.h` 涓細
+完整数据：[`data/oid-table.tsv`](data/oid-table.tsv)
+
+### 2. WDI IHV 请求的真实传输方式
+
+`dot11wdi.h` 中：
 
 ```c
 #define WDI_OID_PREFIX   0x0e4400000U
 #define WDI_IHV_REQUEST  93
 ```
 
-寰?**`OID_WDI_IHV_REQUEST = 0xE440005D`**銆?
-Intel 绉佹湁鍛戒护涓嶈蛋瑁?OID锛?
+得 **`OID_WDI_IHV_REQUEST = 0xE440005D`**。
+
+Intel 私有命令不走裸 OID：
+
 ```
-鎿嶄綔绯荤粺 鈹€鈹€OID_WDI_IHV_REQUEST + WDI TLV鈹€鈹€鈻?椹卞姩
-                                            鈹?ParseWdiIhvRequest
-                                            鈻?                          prepareNicSpecificOidFromWdiIhvRequest
-                                            鈻?                              绉佹湁 NIC-specific OID (0x0D01035C)
+操作系统 ──OID_WDI_IHV_REQUEST + WDI TLV──▶ 驱动
+                                            │ ParseWdiIhvRequest
+                                            ▼
+                          prepareNicSpecificOidFromWdiIhvRequest
+                                            ▼
+                              私有 NIC-specific OID (0x0D01035C)
 ```
 
-杩欐槸鏍囧噯 WDI OID锛岀悊璁轰笂鏅€?NDIS 鍗忚椹卞姩涔熻兘鍙戦€併€?
-### 3. 鍡呮帰妯″紡涓?ETW
+这是标准 WDI OID，理论上普通 NDIS 协议驱动也能发送。
 
-`0x1400450e0` 鏄帴鏀跺垎鍙戝叆鍙ｏ紝鎸夋ā寮忔爣蹇楀垎鍙夛細
+### 3. 嗅探模式与 ETW
+
+`0x1400450e0` 是接收分发入口，按模式标志分叉：
 
 ```c
 if (*(int*)(*(adapter + 0xcf68) + 0x28) == 0)
-    鈫?姝ｅ父涓婃姤鎿嶄綔绯荤粺
+    → 正常上报操作系统
 else
-    鈫?鏋勯€?radiotap 鈫?EtwWriteTransfer 鈫?涓㈠純璇ュ抚
+    → 构造 radiotap → EtwWriteTransfer → 丢弃该帧
 ```
 
-`0x1401a6e80` 璐熻矗鎷?radiotap锛圱SFT / flags / rate / channel / MCS / VHT / HE锛夈€?
-鍗筹細鍡呮帰妯″紡涓嬪抚璧?ETW锛岀敤鎴锋€佸彲璁㈤槄锛涗絾鍚敤鍡呮帰闇€瑕佺鏈夊懡浠ゃ€?
-### 4. 椹卞姩鍐呭彲鏀圭偣
+`0x1401a6e80` 负责拼 radiotap（TSFT / flags / rate / channel / MCS / VHT / HE）。
 
-| # | 浣嶇疆 | 鐜扮姸 | 闅惧害 |
+即：嗅探模式下帧走 ETW，用户态可订阅；但启用嗅探需要私有命令。
+
+### 4. 驱动内可改点
+
+| # | 位置 | 现状 | 难度 |
 |---|---|---|---|
-| 1 | `utilOpModeToMacType` `0x1400432a0` | 姘镐笉杩斿洖 SNIFFER(5) | 浣?|
-| 2 | `prvHmfmHandleActionFrame` `0x1402d70f0` | 绫诲埆 `0x7f` 钀?break | 浣?|
-| 3 | OID 鍒嗘淳琛?| 绉佹湁 OID 鐢ㄦ埛鎬佷笉鍙揪 | 涓?|
-| 4 | `mhiffSendP2pActionFrameCmdVer2` `0x1403455c0` | 鍙敹甯т綋锛屽ご閮ㄧ敱椹卞姩鐢熸垚 | 涓?|
-| 5 | `rxPacketProcessValidMpduFrame` `0x1400456e0` | 闇€鍔犳梺璺嚭鍙?| 楂?|
-| 6 | 鍡呮帰瀛愮郴缁?| 浠ｇ爜鍦紝鏃犺皟鐢ㄨ€?| 楂?|
-| 7 | 鎹㈠彴鍛戒护鏃?| 闇€鏆撮湶 | 涓?|
+| 1 | `utilOpModeToMacType` `0x1400432a0` | 永不返回 SNIFFER(5) | 低 |
+| 2 | `prvHmfmHandleActionFrame` `0x1402d70f0` | 类别 `0x7f` 落 break | 低 |
+| 3 | OID 分派表 | 私有 OID 用户态不可达 | 中 |
+| 4 | `mhiffSendP2pActionFrameCmdVer2` `0x1403455c0` | 只收帧体，头部由驱动生成 | 中 |
+| 5 | `rxPacketProcessValidMpduFrame` `0x1400456e0` | 需加旁路出口 | 高 |
+| 6 | 嗅探子系统 | 代码在，无调用者 | 高 |
+| 7 | 换台命令族 | 需暴露 | 中 |
 
 ---
 
-## 瀹炴祴鎺掗櫎鐨勮矾寰?
-| 璺緞 | 缁撴灉 |
+## 实测排除的路径
+
+| 路径 | 结果 |
 |---|---|
-| `WlanIhvControl`锛坰ervice锛?| `ERROR_DEV_NOT_EXIST` |
-| `WlanIhvControl`锛坉river锛?| `ERROR_NOT_SUPPORTED` |
-| 鏀惧紑 `wlan_secure_ihv_control` DACL 鍚庨噸璇?| 浠嶅け璐ワ紝闄愬埗涓嶅湪 ACL |
-| Npcap `PacketRequest` + 鏍囧噯 OID | 鎴愬姛锛堣鍥炵湡瀹?MAC锛?|
-| Npcap + 绉佹湁 OID `0xFF100015` | `0xC00000BB` NOT_SUPPORTED |
-| Npcap + 绉佹湁 OID `0x0D01011A` | `0xC0010017` INVALID_OID |
-| Npcap 鑷甫 `WlanHelper` | 鍙 mode/channel锛屼絾璧?WlanAPI 鑰岄潪 OID |
+| `WlanIhvControl`（service） | `ERROR_DEV_NOT_EXIST` |
+| `WlanIhvControl`（driver） | `ERROR_NOT_SUPPORTED` |
+| 放开 `wlan_secure_ihv_control` DACL 后重试 | 仍失败，限制不在 ACL |
+| Npcap `PacketRequest` + 标准 OID | 成功（读回真实 MAC） |
+| Npcap + 私有 OID `0xFF100015` | `0xC00000BB` NOT_SUPPORTED |
+| Npcap + 私有 OID `0x0D01011A` | `0xC0010017` INVALID_OID |
+| Npcap 自带 `WlanHelper` | 可读 mode/channel，但走 WlanAPI 而非 OID |
 
-鐢ㄦ埛鎬佹病鏈変换浣曡矾寰勮兘鎶婄鏈夊懡浠ら€佽繘 AX201 椹卞姩銆?
+用户态没有任何路径能把私有命令送进 AX201 驱动。
+
 ---
 
-## 澶嶇幇
+## 复现
 
-闈欐€佸垎鏋愶細Ghidra 12.2 + JDK 25锛屽叏绋嬪彧璇汇€?
+静态分析：Ghidra 12.2 + JDK 25，全程只读。
+
 ```
 analyzeHeadless.bat <project> <name> \
   -process Netwtw14.sys -noanalysis -readOnly \
@@ -153,25 +200,34 @@ analyzeHeadless.bat <project> <name> \
   -postScript Ax201ReadOnlyExport.java <config.json>
 ```
 
-鑴氭湰涓嶄慨鏀圭▼搴忓瓧鑺傘€佷笉鍐欓」鐩姸鎬併€傞厤缃 `src/tools/ghidra/configs/`銆?
-椹卞姩缂栬瘧锛歐indows SDK 10.0.26100 + WDK 10.0.22621 + MSVC 14.51锛岃 `src/driver/oidproxy/build.cmd`銆?
+脚本不修改程序字节、不写项目状态。配置见 `src/tools/ghidra/configs/`。
+
+驱动编译：Windows SDK 10.0.26100 + WDK 10.0.22621 + MSVC 14.51，见 `src/driver/oidproxy/build.cmd`。
+
 ---
 
-## 杩樼己浠€涔?
-| 缂哄彛 | 鎬ц川 |
+## 还缺什么
+
+| 缺口 | 性质 |
 |---|---|
-| 寰蒋 attestation 绛惧悕 | 閲囪喘娴佺▼锛圗V 璇佷功 + Partner Center锛?|
-| WDI TLV 灏佽鏍煎紡 | 鍙粠 SDK 澶存枃浠朵笌鏂囨。杩樺師 |
-| Intel 鍐呭眰杞借嵎鏍煎紡 | 闇€缁х画闈欐€佽繕鍘?|
-| 鍥轰欢鏄惁鍝嶅簲鍡呮帰鍛戒护 | 鍙兘瀹炴祴 |
+| 微软 attestation 签名 | 采购流程（EV 证书 + Partner Center） |
+| WDI TLV 封装格式 | 可从 SDK 头文件与文档还原 |
+| Intel 内层载荷格式 | 需继续静态还原 |
+| 固件是否响应嗅探命令 | 只能实测 |
 
-绛惧悕鏄繀瑕佹潯浠讹紝涓嶆槸鍏呭垎鏉′欢銆?
+签名是必要条件，不是充分条件。
+
 ---
 
-## 闄愬埗
+## 限制
 
-- 闄ゆ爣娉ㄣ€屽疄娴嬨€嶇殑椤圭洰澶栵紝缁撹鍧囨潵鑷潤鎬佸垎鏋愶紝鏈湪纭欢涓婇獙璇併€?- `netwfw14.dat` 鏈В鍖咃紝鍥轰欢渚ц兘鍔涙湭鐭ャ€?- 鍡呮帰妯″紡鑳藉惁琚浐浠舵帴鍙楋紝闈欐€佹棤娉曞垽瀹氥€?- Ghidra 瀵?CFG 闂存帴璋冪敤涓庤嚜鍔ㄧ被鍨嬫帹鏂瓨鍦ㄥ凡鐭ュけ鐪燂紝鐩稿叧缁撹宸插湪鍚勬枃妗ｆ爣娉ㄣ€?
+- 除标注「实测」的项目外，结论均来自静态分析，未在硬件上验证。
+- `netwfw14.dat` 未解包，固件侧能力未知。
+- 嗅探模式能否被固件接受，静态无法判定。
+- Ghidra 对 CFG 间接调用与自动类型推断存在已知失真，相关结论已在各文档标注。
+
 ---
 
-## 鐗堟潈涓庡厤璐?
-瑙?[NOTICE.md](NOTICE.md)銆?
+## 版权与免责
+
+见 [NOTICE.md](NOTICE.md)。

@@ -1,4 +1,4 @@
-﻿# 厂商二进制：绝不提交
+# 厂商二进制：绝不提交
 *.sys
 *.dll
 *.dat
@@ -6,8 +6,10 @@
 *.exe
 *.msi
 
-# 本地证据存档（反编译产物与字符串转储，不发布）
-private/
+# 反编译产物与字符串转储（存档在仓库同级 private/，不在版本库内）
+evidence/
+*.strings.txt
+*.asm.txt
 
 # 工具与缓存
 ghidra-project/
