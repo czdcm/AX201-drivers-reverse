@@ -1,5 +1,5 @@
 {
-    "generated":  "2026-11-11T18:16:30+08:00",
+    "generated":  "2026-11-11T18:27:38+08:00",
     "sample":  "Netwtw14.sys 23.50.21.2 sha256 87C083010DAD3FB6AC8CAC99DDB5E274DF300DA789CC8774B4A25DA137DA38B8",
     "totals":  {
                    "functions_decompiled":  13348,
@@ -8,9 +8,13 @@
                    "strings":  11076,
                    "imports":  177,
                    "tags":  381,
-                   "vtable_candidates":  132,
+                   "vtables_confirmed":  125,
+                   "vtable_slot_edges":  3720,
+                   "indirect_edges_recovered":  562,
                    "named_functions":  2246,
-                   "files_read_by_agents":  "600-800"
+                   "fw_commands":  118,
+                   "fw_version_overrides":  27,
+                   "module_reports":  12
                },
     "artifacts":  [
                       {
@@ -84,6 +88,11 @@
                           "sha256_16":  "7BF23144AAE0A686"
                       },
                       {
+                          "path":  "full-re/meta/fw_cmd_fields.tsv",
+                          "bytes":  21372,
+                          "sha256_16":  "9391540B44C9E9A1"
+                      },
+                      {
                           "path":  "full-re/meta/imports.txt",
                           "bytes":  5911,
                           "sha256_16":  "51C2D4767315D5C0"
@@ -104,9 +113,24 @@
                           "sha256_16":  "54D31D54242417F5"
                       },
                       {
+                          "path":  "full-re/meta/vtables_confirmed.tsv",
+                          "bytes":  81179,
+                          "sha256_16":  "403D5CB33BF55D09"
+                      },
+                      {
                           "path":  "full-re/meta/vtable_annotated.tsv",
                           "bytes":  4840,
                           "sha256_16":  "3366C8E14C2CF9C6"
+                      },
+                      {
+                          "path":  "full-re/meta/vtable_edges.tsv",
+                          "bytes":  136883,
+                          "sha256_16":  "EDF7CAFC3EFF9D2F"
+                      },
+                      {
+                          "path":  "full-re/meta/wdi_indications.tsv",
+                          "bytes":  5343,
+                          "sha256_16":  "80B209C7B68B8E84"
                       },
                       {
                           "path":  "full-re/modules/config-mib.md",
@@ -122,6 +146,11 @@
                           "path":  "full-re/modules/datapath-tx-ndis.md",
                           "bytes":  27047,
                           "sha256_16":  "FB7D1C4009AE47D2"
+                      },
+                      {
+                          "path":  "full-re/modules/fw-command-layouts.md",
+                          "bytes":  32230,
+                          "sha256_16":  "F09B5EFBA8EFC367"
                       },
                       {
                           "path":  "full-re/modules/fw-command.md",
@@ -142,6 +171,16 @@
                           "path":  "full-re/modules/p2p-coex-power.md",
                           "bytes":  59019,
                           "sha256_16":  "38681B3EADC570CA"
+                      },
+                      {
+                          "path":  "full-re/modules/vtable-recovery.md",
+                          "bytes":  23131,
+                          "sha256_16":  "C303E2D2353B2F78"
+                      },
+                      {
+                          "path":  "full-re/modules/wdi-indication.md",
+                          "bytes":  31453,
+                          "sha256_16":  "279C22489238058B"
                       },
                       {
                           "path":  "full-re/modules/wdi-osal-a.md",

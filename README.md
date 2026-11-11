@@ -71,6 +71,7 @@ docs/                                分析报告
   13-deliverable-and-signing.md      交付形态、签名与社区版安装设计
   14-conclusion.md                   阶段性裁定
   15-handoff.md                      交接记录
+  16-full-structure.md               全量结构还原报告（13,348 函数 / 9 个模块报告汇总）
   external/
     dropbridge-radio.md              DropBridge radio 后端契约
     dropbridge-awdl.md               DropBridge AWDL 上层复用面

@@ -157,7 +157,26 @@ RTTI 被剥除（`/GR-`），`.rdata` 中无类型描述符；类名全部来自
 
 `Solar` / `Blazar` 为芯片代号分支，说明驱动内含两代硬件差异化实现。
 
-**虚表**：`.rdata` 中扫描出 **132 个候选虚表**（最大 99 项）。由于 Ghidra 完全未做 vtable 解析，所有经虚表的调用在调用图中**不存在**——这是全局入度统计系统性偏低的主因，也是 947 个"孤立函数"大部分其实是 vtable thunk 的原因。
+**虚表**（第二轮专项攻关已完成）：
+
+驱动用 `/GR-` 编译，**全文件无一处 RTTI 修饰名**，`vtable[-1] → COL → TypeDescriptor` 这条标准路径不可用。改用更强的判据——**vptr 安装现场**（MSVC 构造/析构的标准形态 `LEA RAX,[vftable]` + `MOV [RCX],RAX`）：
+
+| 项目 | 数字 |
+|---|---:|
+| 确认虚表（带安装铁证） | **125** |
+| 存疑单列 | 3 |
+| 定出类归属 | 91 / 125（32 个类） |
+| 虚表槽位边 | 3,720（覆盖 1,319 个函数） |
+| **新补出的间接派发边** | **562** |
+| 原「入度为 0」函数 | 4,580，其中 **1,256（27.4%）被虚表认领** |
+
+补边后**原 Top 12 入度榜一个都没变**（前 12 名是库/工具函数，靠直接调用就有几千入度）——说明补边算法没有污染既有热点，只是把一批原本入度 0 的桩函数放回原位（如 `_purecall` 0 → 469、`thunk_FUN_14011b630` 0 → 359）。
+
+**一个必须记住的坑**：候选中的 `0x14043FCD0` **不是虚表**，而是**寄存器访问器分派表**（3,382 条目、838 个去重目标、全部挤在 171 KB 内）。若把它当虚表处理，会一次灌进 3,382 条假边。
+
+**另一个反直觉点**：低去重率不能用来否决虚表——本驱动的 WDI/OSAL 接口大量方法共用空桩（`_purecall` 被引用 431 次），所以 21% 去重率的真虚表确实存在。
+
+
 
 ---
 
@@ -177,15 +196,29 @@ CNdis::cmdEntryNormalMode (0x1400145e0)
 
 **Task 路径**：`CPort → CCmdTask::execute → completeTaskByIndication (0x140026e20)`
 
-**指示路径**：
+**指示路径**（第二轮已解到序列化器层）：
+
 ```
 CWdi*IndicationsObserver::handle<X>
  → 字段翻译器（FUN_1400dc6xx–dcc00 一批）
- → GenerateWdi<X>FromIhv（35 个 63 字节薄壳，0x1403cf7b8 起）
- → FUN_1403d1760（WDI 对象工厂）
+ → GenerateWdi<X>FromIhv（34 个薄壳 0x1403cf7b8 起 + 1 个空消息壳 0x1403d003c）
+ → FUN_1403d1760（TLV 序列化器）
  → oscWdiIndicate<X>
- → NdisMIndicateStatusEx
+ → FUN_140003be0 → NdisMIndicateStatusEx
 ```
+
+**关键澄清**：`FUN_1403d1760` 不是"WDI 对象工厂"，而是**通用 TLV 序列化器**——34 个薄壳的调用者里只有 21 个是指示观察者，另 9 个是 `osal::CCmdPropGet*::buildCompleteOidBuffer` 与 `osal::CCmdTask*::buildCompleteIndicationBuffer`。**OID 完成、任务完成、指示三者共用同一套 TLV 生成器**。
+
+描述表结构（用原始 PE 字节解出）：
+
+- `_TLV_CONTEXT`（16 B 头）：`+0x00 entries*`、`+0x08 u16 count`、`+0x0A u16 typeId`（与薄壳第一参数 34/34 全等）
+- `TLV_ENTRY`（24 B）：`+0x00 valueDef`、`+0x08 versionGate*`、`+0x10 u16 fieldId`、`+0x12 u16 srcOffset`、`+0x14 u16 flags`（bit0=叶子/嵌套、bit1=数组）
+- `valueDef` 二态：嵌套表（递归）或 `FIELD_LAYOUT{u16* chunk, u16 n, u16 sizeA, u16 stride, u16 flags}`
+- `versionGate`：`+0x20 loVersion`、`+0x24 hiVersion`、`+0x28 altEntryIndex`（真实分支不是直观的 `[lo,hi)` 窗口）
+- 线格式：`{u16 fieldId, u16 payloadLen, payload}`
+
+`NdisMIndicateStatusEx` 有 3 个调用点：`FUN_140003be0`（主发送器，33 个调用者）、`FUN_140003b50`（空消息）、`FUN_140118380`（本地状态，与 WDI TLV 无关）。
+
 
 结构偏移：
 
@@ -245,19 +278,49 @@ MHIF 帧头：
 
 超时不在本层（无定时器/重试字段），推断在 TX 队列层。
 
-### 7.5 命令清单（节选）
+### 7.5 命令清单（已按构造函数断言名重建对应关系）
 
-| cmdId | 版本 | 大小 | 命令 |
+> **重要修正**：cmdId 与命令名的对应不能凭记忆。下表是按每个构造函数的断言串（`"mhiffBuildXxx"`）逐个重建的，纠正了两处错配。
+
+| cmdId | 版本 | 请求大小 | 命令 |
 |---:|---:|---:|---|
 | 284 | 10 | 0x1C | `mhiffBuildTxCommandVer10` |
-| 435 | 1 | 0xB0 | 添加站点 |
-| 512 | 4 | 0x104 | PHY 上下文 |
-| 1527 | 3 | 0x14 | 通知类 |
-| 2048 | 12→13 | 0x250→0x264 | 位置测量（FTM） |
-| 401 | 12→13 | — | TX Beacon |
+| **778** | 1 | 0x60 | **`mhiffBuildAddStaCommandVer1`**（此前误记为 435） |
+| **264** | 4→5 | 0x20 / — | **`mhiffBuildPhyContextCommandVer4/Ver5`**（此前误记为 512） |
+| 435 | 1 | 0xB0 | `mhiffBuildRSSConfigCommandVer1` |
+| 512 | 4 | 0x104 | `mhiffTranslateSharedMemNotifVer4`（上行解析，非下行命令） |
+| 193 | 5 | 变长 | RxMpdu |
 | 268 | 5 | 0x0C | 扫描数据库配置 |
-| 441 | 1→2 | — | 发送 P2P Action Frame |
-| 3076 | 1→2 | — | SAR 偏移映射 |
+| 401 | 12→13 | 变长（固定头 0x20） | TxBeacon |
+| 441 | 1→2 | 0x21C | 发送 P2P Action Frame |
+| 456 | — → 8 | — | MccUpdateNotif |
+| 514 | 1 | — | DutyCycle |
+| 773 | 1→2 | — | SessionProtection |
+| 1304 | 1 | 0x50 | SecKey |
+| 1288 | 2 | 0x20 | RlcCfg |
+| 2048 | 12→13 | 0x250 → 0x264 | LocationRng（FTM） |
+| 3073 | 6→7→8 | — | LariConfig |
+| 3076 | 1→2 | 0x154 | SarOffsetMapping |
+| 4096 / 4098 / 4100 | — | 步长 0x98 / 0x98 / 0x166 | Statistics 族 |
+| 4101 | — | 0x54 | Statistics（最干净，0x00 16B + 0x10 60B） |
+| 102 / 103 / 104 | — | — | TimingMsmt |
+
+**27 条运行期覆盖表不仅"覆盖"，还"补充"**：`401 TxBeacon Ver13`、`456 MccUpdateNotif Ver8`、`3073 LariConfig Ver7/Ver8`、`264 PhyContext Ver5` 等**根本不在 118 条静态表里**——只读静态表会直接漏掉整条命令。这正是"同一 `.sys` 内新旧两版构造函数并存、由固件上报的 API 版本选路"的硬证据。
+
+**`+0x08` 的大小字段只在方向 0（请求）可信**：方向 1（响应/通知）经常登记值小于实际 memset 长度（如 4096 登记 444、实际 memset 620）。还原时应以构造函数里的 `memset` / 断言常量为准。
+
+### 7.6 固件演进的三种固定形态
+
+| 形态 | 样本 |
+|---|---|
+| 新增保留字节 | PhyContext Ver4→Ver5：唯一差别是 Ver5 多写 `+0x14 = 0`，其余字段逐字相同 |
+| 头部重排/插入 | SessionProtection Ver1→Ver2（`cfg+0x18` 提到 0 号位）；SendP2pActionFrame Ver1→Ver2（前 6 字节后挪 1 字节）；LocationRng Ver12→Ver13（起点下移 0x24，总长 592→612） |
+| 掩码收紧/放宽 | LariConfig Ver6→7→8：Ver7 新增 `+0x18` 能力字（掩码 `0x7FE24F`），Ver8 给 `+0x0C` 加 `&0x3F`、`+0x10` 由低 4 位放宽到低 5 位 |
+
+### 7.7 一处值得注意的缺陷
+
+`TxBeacon (401)` 的构造函数**从不写 `+0x08` 与 `+0x14`，`memset` 也没有覆盖这两个位置**——命令结构里会带出未初始化的栈/堆残留。这是静态分析发现的真实缺陷点，已在字段表中如实记录。
+
 
 完整 118 条：`out/modules/fw-command.md`、`out/clusters/mhiff_commands.tsv`
 
@@ -472,7 +535,19 @@ MAC 头构造 `prvActionFrameAddMacHeaderToFrame (0x140141440)`：`FC[0]=0xD0`�
 
 ---
 
-## 15. 产物
+## 15. 独立交叉校验
+
+子智能体的结构性结论并非全部采信，以下三处由主控独立复算原始二进制确认（自行解析 PE 节区表完成 VA→文件偏移映射，未依赖子智能体的转述）：
+
+| 声明 | 校验方法 | 结果 |
+|---|---|---|
+| 固件命令表位于 VA `0x1405B6060`（文件 `0x536460`），步长 0x28 | 直接读原始字节 | ✅ 前三条 cmdId=193/284/435，版本 5/10/1，请求大小 0/0x1C/0xB0，与报告一致 |
+| 运行期版本覆盖表位于 `0x1404B6D50`，含 LocationRng 升级 | 同上 | ✅ 第二条 cmdId=2048、版本 13、大小 `0x264`，与"Ver12→Ver13、0x250→0x264"一致 |
+| 整型参数描述符表位于 `0x1405C5700`，641 项 × 0x3C，首项 `debugInt` | 同上 | ✅ 槽号 0、名字 `debugInt`、缺省值 3563 |
+
+PE 布局（供复核）：ImageBase `0x140000000`，33 个节区，`.text` RVA `0x1000`/文件 `0x800`，`PAGEdBla` RVA `0x5B6000`/文件 `0x536400`。
+
+## 16. 产物
 
 | 内容 | 路径 |
 |---|---|
