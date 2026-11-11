@@ -1,0 +1,157 @@
+{
+    "generated":  "2026-11-11T18:16:30+08:00",
+    "sample":  "Netwtw14.sys 23.50.21.2 sha256 87C083010DAD3FB6AC8CAC99DDB5E274DF300DA789CC8774B4A25DA137DA38B8",
+    "totals":  {
+                   "functions_decompiled":  13348,
+                   "asm_files":  13348,
+                   "call_edges":  52522,
+                   "strings":  11076,
+                   "imports":  177,
+                   "tags":  381,
+                   "vtable_candidates":  132,
+                   "named_functions":  2246,
+                   "files_read_by_agents":  "600-800"
+               },
+    "artifacts":  [
+                      {
+                          "path":  "full-re/clusters/assignment.tsv",
+                          "bytes":  1056829,
+                          "sha256_16":  "81BC0FBE7E6A4BFA"
+                      },
+                      {
+                          "path":  "full-re/clusters/cluster_summary.tsv",
+                          "bytes":  234,
+                          "sha256_16":  "477EC10DDD4C4145"
+                      },
+                      {
+                          "path":  "full-re/clusters/cpp_classes.tsv",
+                          "bytes":  1733,
+                          "sha256_16":  "83A74CE4F98CD0D1"
+                      },
+                      {
+                          "path":  "full-re/clusters/function_map.tsv",
+                          "bytes":  985960,
+                          "sha256_16":  "D6D6F981957DC3F2"
+                      },
+                      {
+                          "path":  "full-re/clusters/iregisters_methods.txt",
+                          "bytes":  11095,
+                          "sha256_16":  "2D58CE7E8F30B567"
+                      },
+                      {
+                          "path":  "full-re/clusters/log_family.tsv",
+                          "bytes":  9287,
+                          "sha256_16":  "E44BCD5A3600310E"
+                      },
+                      {
+                          "path":  "full-re/clusters/mhiff_commands.tsv",
+                          "bytes":  6204,
+                          "sha256_16":  "90789C4EE1F3FFB0"
+                      },
+                      {
+                          "path":  "full-re/clusters/prefix_summary.tsv",
+                          "bytes":  315,
+                          "sha256_16":  "6484935B4E878F12"
+                      },
+                      {
+                          "path":  "full-re/clusters/tag_modules.tsv",
+                          "bytes":  27916,
+                          "sha256_16":  "F05CAEA5BD70735D"
+                      },
+                      {
+                          "path":  "full-re/clusters/tag_summary.tsv",
+                          "bytes":  29908,
+                          "sha256_16":  "A1EA57A89A965330"
+                      },
+                      {
+                          "path":  "full-re/graph/cluster_edges.tsv",
+                          "bytes":  3590,
+                          "sha256_16":  "E28C6583D21B64B5"
+                      },
+                      {
+                          "path":  "full-re/graph/top_indegree.tsv",
+                          "bytes":  2871,
+                          "sha256_16":  "3F080B6765658BC6"
+                      },
+                      {
+                          "path":  "full-re/graph/top_outdegree.tsv",
+                          "bytes":  3418,
+                          "sha256_16":  "F841EDDBFAFE96C9"
+                      },
+                      {
+                          "path":  "full-re/meta/functions.txt",
+                          "bytes":  962418,
+                          "sha256_16":  "7BF23144AAE0A686"
+                      },
+                      {
+                          "path":  "full-re/meta/imports.txt",
+                          "bytes":  5911,
+                          "sha256_16":  "51C2D4767315D5C0"
+                      },
+                      {
+                          "path":  "full-re/meta/memory_blocks.txt",
+                          "bytes":  2342,
+                          "sha256_16":  "C4C249D211956881"
+                      },
+                      {
+                          "path":  "full-re/meta/strings.txt",
+                          "bytes":  564315,
+                          "sha256_16":  "E8C82EE775DD68E1"
+                      },
+                      {
+                          "path":  "full-re/meta/vtables.txt",
+                          "bytes":  15962,
+                          "sha256_16":  "54D31D54242417F5"
+                      },
+                      {
+                          "path":  "full-re/meta/vtable_annotated.tsv",
+                          "bytes":  4840,
+                          "sha256_16":  "3366C8E14C2CF9C6"
+                      },
+                      {
+                          "path":  "full-re/modules/config-mib.md",
+                          "bytes":  49816,
+                          "sha256_16":  "EB6E7EE09C4B73E3"
+                      },
+                      {
+                          "path":  "full-re/modules/datapath-rx.md",
+                          "bytes":  42519,
+                          "sha256_16":  "1DEB9C798B62AE1D"
+                      },
+                      {
+                          "path":  "full-re/modules/datapath-tx-ndis.md",
+                          "bytes":  27047,
+                          "sha256_16":  "FB7D1C4009AE47D2"
+                      },
+                      {
+                          "path":  "full-re/modules/fw-command.md",
+                          "bytes":  31274,
+                          "sha256_16":  "5ACA48A3084FB518"
+                      },
+                      {
+                          "path":  "full-re/modules/infra-unnamed.md",
+                          "bytes":  33218,
+                          "sha256_16":  "3E202F21D806AD16"
+                      },
+                      {
+                          "path":  "full-re/modules/mgmt-frame.md",
+                          "bytes":  32016,
+                          "sha256_16":  "372CDFD9854D72B1"
+                      },
+                      {
+                          "path":  "full-re/modules/p2p-coex-power.md",
+                          "bytes":  59019,
+                          "sha256_16":  "38681B3EADC570CA"
+                      },
+                      {
+                          "path":  "full-re/modules/wdi-osal-a.md",
+                          "bytes":  30170,
+                          "sha256_16":  "33FA23CCCAA0A0C9"
+                      },
+                      {
+                          "path":  "full-re/modules/wdi-osal-b.md",
+                          "bytes":  34576,
+                          "sha256_16":  "91CDBA21BC3475E2"
+                      }
+                  ]
+}
