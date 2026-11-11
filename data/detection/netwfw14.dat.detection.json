@@ -1,0 +1,22 @@
+﻿{
+    "detects": [
+        {
+            "filetype": "Binary",
+            "info": "",
+            "offset": "0",
+            "parentfilepart": "Header",
+            "size": "16824292",
+            "values": [
+                {
+                    "info": "",
+                    "name": "Unknown",
+                    "string": "Unknown: Unknown",
+                    "type": "Unknown",
+                    "version": ""
+                }
+            ]
+        }
+    ]
+}
+
+
